@@ -164,6 +164,9 @@ remove_connection(ClientId) ->
 %% subscribes a client to a channel
 %% @end 
 %%--------------------------------------------------------------------
+subscribe(ClientId, ChannelName) when is_binary(ClientId) ->
+    subscribe(binary_to_list(ClientId), ChannelName);
+
 subscribe(ClientId, ChannelName) ->
     F = fun() ->
         Channel = case mnesia:read({channel, ChannelName}) of
@@ -188,6 +191,9 @@ subscribe(ClientId, ChannelName) ->
 %% unsubscribes a client from a channel
 %% @end 
 %%--------------------------------------------------------------------
+unsubscribe(ClientId, ChannelName) when is_binary(ClientId) ->
+    unsubscribe(binary_to_list(ClientId), ChannelName);
+
 unsubscribe(ClientId, ChannelName) ->
     F = fun() ->
         case mnesia:read({channel, ChannelName}) of
