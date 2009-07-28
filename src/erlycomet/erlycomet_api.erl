@@ -106,7 +106,7 @@ replace_connection(ClientId, Pid, NewState, CommentFiltered) ->
     end,
     case mnesia:transaction(F2) of
         {atomic, ok} -> {ok, Status};
-        _ -> error
+        Whatever -> {error, Whatever}
     end.
        
           
