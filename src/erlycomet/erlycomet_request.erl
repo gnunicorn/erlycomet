@@ -131,16 +131,16 @@ process_cmd(_Req, <<"/meta/handshake">> = Channel, Struct, _) ->
         {supportedConnectionTypes, [
             <<"long-polling">>,
             <<"callback-polling">>]},
-        {clientId, Id},
+        {clientId, list_to_binary(Id)},
         {successful, true},
         {ext, Ext1}]},
     % Resp2 = [{advice, Advice} | Resp],
     comment_filter(JsonResp, CF);
     
 process_cmd(Req, <<"/meta/connect">> = Channel, Struct, Callback) ->  
-    ClientId = get_json_map_val(<<"clientId">>, Struct),
+    ClientId = binary_to_list(get_json_map_val(<<"clientId">>, Struct)),
     ConnectionType = get_json_map_val(<<"connectionType">>, Struct),
-    L = [{channel,  Channel}, {clientId, ClientId}],    
+    L = [{channel,  Channel}, {clientId, list_to_binary(ClientId)}],
     case erlycomet_api:replace_connection(ClientId, self(), connected) of
         {ok, Status} when Status =:= ok ; Status =:= replaced_hs ->
             comment_filter({struct, [{successful, true} | L]}, erlycomet_api:connection(ClientId));
